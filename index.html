@@ -7,47 +7,127 @@
 <body>
     <script>
         // ЗАДАНИЯ ДЛЯ РАЗМИНКИ!!!!!!)))
+        let taskNumber = 0;
 
-        //1) Есть две функции конструктор! Нужно c помощью prototype сделать second родителем first!
+        console.warn(`Task # ${++taskNumber}`);
+        //+1) Есть две функции конструктор! Нужно c помощью prototype сделать second родителем first!
+
         function A(name) {
             this.name = name;
         }
+
         function B(lastName) {
             this.lastName = lastName;
         }
-        const first = new A('Sergei');
         const second = new B('Shakhov');
-        
-        //2) Создать класс функция конструктор которого принимает два параметра position, salary, 
-        // также создать одно private поле positions = ['software developer', 'hr manager', 'project manager'], getter(get функция)!
-        // которая смотрит на поле positions, и если в position есть одно из перечисленных то возвращает true иначе false
-    
+        A.prototype = second;
+        const first = new A('Sergei');
 
-        //3) Есть класс App! Добавить две функции одна из них устанавливает product(создает поле product обьект с полем name, price), вторая функция получает price 
-        // и одно статическое свойство yearOfIssue
-        class App {
-            constructor() {
-            };
+        console.log('Second parent of firs', first.__proto__);
+
+
+        console.warn(`Task # ${++taskNumber}`);
+        /* +2) Создать класс функция конструктор которого принимает два параметра position, salary, 
+         также создать одно private поле positions = ['software developer', 'hr manager', 'project manager'], 
+         getter(get функция)!
+         которая смотрит на поле positions, и если в position есть одно из перечисленных то возвращает true иначе false */
+        class Employee {
+            constructor(position, salary) {
+                this.position = position;
+                this.salary = salary;
+            }#
+            positions = ['Scram Master', 'hr manager', 'project manager'];
+
+            get posCheker() {
+                return this.#positions.includes(this.position);
+            }
         }
-       
+        const scramMaster = new Employee('Scram Master', "1500$");
+        const frontEndDev = new Employee('Front End Dev', "2000$");
+        console.log('Positions includes position "scramMaster": ', scramMaster.posCheker);
+        console.log('Positions includes position "frontEndDev": ', frontEndDev.posCheker);
+
+
+        console.warn(`Task # ${++taskNumber}`);
+        /* 3) Есть класс App! Добавить две функции одна из них устанавливает 
+         product(создает поле product обьект с полем name, price), вторая функция получает price 
+         и одно статическое свойство yearOfIssue */
+
+
+        class App {
+
+            constructor(date) {
+                this.date = date;
+            };
+            set product([name, price]) {
+                this._product = {
+                    name,
+                    price
+                }
+            }
+            get product() {
+                return `${this._product.name}: ${this._product.price}`;
+            }
+            static yearOfIssue(app) {
+                return app.date.getFullYear();
+            }
+        }
+        const firstApp = new App(new Date(2016, 7, 20));
+        const secondApp = new App(new Date(2019, 09, 11));
+        const thirdApp = new App(new Date());
+
+        firstApp.product = ['chrome', 1000];
+        secondApp.product = ['IE', 800];
+        console.log(`Product price of firstApp - ${firstApp.product}`);
+        console.log(`Product price of secondApp - ${secondApp.product}`);
+
+        console.log('Year of issue firstApp: ', App.yearOfIssue(firstApp));
+        console.log('Year of issue secondApp: ', App.yearOfIssue(secondApp));
+        console.log('Year of issue thirdApp: ', App.yearOfIssue(thirdApp));
+
+
+        console.warn(`Task # ${++taskNumber}`);
         // 4) Пишем свой split и join))!
+
+
         function split() {
             // your code
         }
+
         function join() {
             // your code
         }
-        // 5) Ну и на последок перепишем класс в вид самовыз функция которая возвращает функцию-конструктор
-        class NewApp {
-            constructor(object) {
+
+
+        console.warn(`Task # ${++taskNumber}`);
+        // 5) Ну и на последок перепишем класс в вид самовыз функция 
+        // которая возвращает функцию-конструктор
+
+
+        // class NewApp {
+        //     constructor(object) {
+        //         this.object = object;
+        //     }
+        //     getObject() {
+        //         return object;
+        //     }
+        // }
+
+        let NewApp = (function () {
+            function NewApp(object) {
                 this.object = object;
             }
-            getObject() {
-                return object;
+            NewApp.prototype.getObject = function () {
+                return this.object;
             }
-        }
+            return NewApp;
+        })();
 
-        
+        const app = new NewApp({
+            AppName: 'chrome'
+        });
+        console.log('Get object:', app.getObject());
+
     </script>
 </body>
 
