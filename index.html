@@ -90,14 +90,69 @@
         // 4) Пишем свой split и join))!
 
 
-        function split() {
-            // your code
+        function split(str = '', separator, limit = -1) {
+            let arr = [],
+                tempstr = '';
+            separator = checkType(separator) === 'RegExp' ? charFromRegExp(str, separator) : separator;
+            // separator = String(separator);
+            if (separator === 'null' || !str.includes(separator)) {
+                arr.push(str);
+                return arr;
+            } else if (separator === '') {
+                for (let i = 0; i < str.length; i++) {
+                    arr.push(str[i]);
+                }
+                return arr;
+            }
+            for (let i = 0; i < str.length;) {
+                if (str.startsWith(separator, i) && tempstr) {
+                    arr.push(tempstr);
+                    tempstr = '';
+                    i += separator.length;
+                } else if (i === str.length - 1) {
+                    tempstr += str[i];
+                    arr.push(tempstr);
+                    i++
+                } else {
+                    tempstr += str[i];
+                    i++;
+                }
+            }
+            limit = limit > arr.length ? arr.length : limit;
+            return limit > -1 ? (arr.length = limit, arr) : arr;
         }
 
-        function join() {
-            // your code
+        function charFromRegExp(str, reg) {
+            let result = str.match(reg)
+            return result ? result[0] : result;
         }
 
+        function checkType(obj) {
+            return Object.prototype.toString.call(obj).slice(8, -1);
+        }
+        let strForSplit = 'Any; string; instead;of a  number';
+        console.log(`String for split: "${strForSplit}"`);
+        console.log(`Splited string test split(strForSplit): [${split(strForSplit)}]`);
+        console.log(`Splited string test split(strForSplit, ''): [${split(strForSplit, '')}]`);
+        console.log(`Splited string test split(strForSplit, ' ', 2): [${split(strForSplit, ' ', 2)}]`);
+        console.log(`Splited string test split(strForSplit, ' ', 500): [${split(strForSplit, ' ', 500)}]`);
+        console.log(`Splited string test split(strForSplit,/;/): [${split(strForSplit,/;/)}]`);
+
+
+        function join(array, separator = ',') {
+            separator = String(separator);
+            return array.reduce((a, c, i, arr) => {
+                c = c === undefined || c === null ? '' : c;
+                return i === arr.length - 1 ? a += c : a += c + separator;
+            }, '');
+
+        }
+
+        let arrForJoin = [1, 2, 3, 4, 5, null, 'save', undefined, true];
+        console.log('Array for join:', arrForJoin);
+        console.log('Joined array test 1: ', join(arrForJoin));
+        console.log('Joined array test 2: ', join(arrForJoin, []));
+        console.log('Joined array test 3: ', join(arrForJoin, ' / '));
 
         console.warn(`Task # ${++taskNumber}`);
         // 5) Ну и на последок перепишем класс в вид самовыз функция 
@@ -127,7 +182,6 @@
             AppName: 'chrome'
         });
         console.log('Get object:', app.getObject());
-
     </script>
 </body>
 
